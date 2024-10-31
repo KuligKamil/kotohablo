@@ -2,7 +2,7 @@ from typing import Optional
 
 from bson import Regex
 from pymongo import DESCENDING
-from src.models import Language, PartOfSpeech, Word
+from app.models import Language, PartOfSpeech, Word
 
 
 async def add_word(

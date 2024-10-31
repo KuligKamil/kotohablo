@@ -1,8 +1,8 @@
 from asyncio import run
 
-from src.crud import add_word, get_words, remove_word, update_word
-from src.database_connection import database_init
-from src.models import Word, Language, PartOfSpeech
+from app.crud import add_word, get_words, remove_word, update_word
+from app.database_connection import database_init
+from app.models import Word, Language, PartOfSpeech
 
 
 async def init():
@@ -76,5 +76,7 @@ async def init():
     await remove_word(id=word.id)
     words = await get_words()
     assert len(words) == 3
+
+
 if __name__ == "__main__":
     run(init())
