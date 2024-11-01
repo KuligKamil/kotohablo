@@ -36,12 +36,16 @@ class PartOfSpeech(SuperEnum):
     interjection = "interjection"  # wykrzyknik
 
 
-class Word(Document, Date, Active):
+class WordCreate(BaseModel):
     value: str
     meaning: str
     is_learned: bool
     language: Language
     part_of_speech: PartOfSpeech
+
+
+class Word(Date, Active, WordCreate, Document):
+    pass
 
 
 # get languages

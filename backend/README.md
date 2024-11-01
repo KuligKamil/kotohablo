@@ -14,4 +14,15 @@
 
 `pdm run ruff format . `
 
+### dev
+
+`pdm run fastapi dev app/main.py`
+
+### prod
+
 `pdm run fastapi run app/main.py`
+
+
+* I need fastapi[standard] ?! 
+* add docker files
+

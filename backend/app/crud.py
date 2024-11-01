@@ -1,5 +1,7 @@
 from typing import Optional
 
+from beanie import PydanticObjectId
+from bson import ObjectId
 from pymongo import DESCENDING
 
 from app.models import Language, PartOfSpeech, Word
@@ -72,5 +74,4 @@ async def remove_word(
 async def get_word(
     id: str,
 ) -> Word:
-    return await Word.get(document_id=id)
-
+    return await Word.get(document_id=PydanticObjectId(ObjectId(id)))
