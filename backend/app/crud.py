@@ -2,14 +2,14 @@ from typing import Optional
 
 from beanie import PydanticObjectId
 from bson import ObjectId
-from pymongo import DESCENDING
+from pymongo import ASCENDING, DESCENDING
 
-from app.models import Language, PartOfSpeech, Word
+from app.models import Language, PartOfSpeech, SortBy, Word
 
 
 async def get_words(
-    value: Optional[str] = None,
-    # meaning: str,
+    sort_by: SortBy,
+    text: Optional[str] = None,
     is_learned: Optional[bool] = None,
     language: Optional[Language] = None,
     part_of_speech: Optional[PartOfSpeech] = None,
@@ -17,16 +17,19 @@ async def get_words(
     search_criteria = {}
     if isinstance(is_learned, bool):
         search_criteria["is_learned"] = is_learned
-    if value is not None:
-        search_criteria["value"] = {"$regex": value, "$options": "i"}
+    if text is not None:
+        ilike = {"$regex": text, "$options": "i"}
+        search_criteria["$or"] = [{"value": ilike}, {"meaning": ilike}]
         # search_criteria["value"] = Regex(pattern=value, flags="i")
     if language is not None:
         search_criteria["language"] = language
     if part_of_speech is not None:
         search_criteria["part_of_speech"] = part_of_speech
-    return (
-        await Word.find(search_criteria).sort((Word.create_date, DESCENDING)).to_list()
-    )
+    if sort_by == SortBy.recently:
+        sort_by = (Word.create_date, DESCENDING)
+    else:
+        sort_by = (Word.value, ASCENDING)
+    return await Word.find(search_criteria).sort(sort_by).to_list()
 
 
 async def add_word(
@@ -55,7 +58,10 @@ async def update_word(
     language: Language = Language.spanish,
     part_of_speech: PartOfSpeech = PartOfSpeech.verb,
 ) -> Word:
-    word = await Word.find_one(Word.id == id)
+    print(id, value, is_learned, language, part_of_speech)
+    # word = await Word.find_one(Word.id == id)  # TODO: why it's not working
+    word = await Word.get(document_id=id)
+    print(word.model_dump())
     word.value = value
     word.meaning = meaning
     word.is_learned = is_learned

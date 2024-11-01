@@ -36,6 +36,18 @@ class PartOfSpeech(SuperEnum):
     interjection = "interjection"  # wykrzyknik
 
 
+class WordSearch(BaseModel):
+    text: str | None
+    is_learned: bool | None
+    language: Language | None
+    part_of_speech: PartOfSpeech | None
+
+
+class SortBy(Enum):
+    recently = "recently"
+    alphabetic = "alphabetic"
+
+
 class WordCreate(BaseModel):
     value: str
     meaning: str
