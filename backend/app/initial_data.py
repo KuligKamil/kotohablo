@@ -1,13 +1,12 @@
 from asyncio import run
 
-from app.crud import add_word, get_words, remove_word, update_word
+from app.crud import add_word, get_word, get_words, remove_word, update_word
 from app.database_connection import database_init
-from app.models import Word, Language, PartOfSpeech
+from app.models import Language, PartOfSpeech, Word
 
 
 async def init():
     await database_init(document_models=[Word], clean_database=True)
-
     words = [
         Word(
             value="amigo",
@@ -31,9 +30,7 @@ async def init():
             part_of_speech=PartOfSpeech.verb,
         ),
     ]
-    words_ids = await Word.insert_many(words)
-    # words = await Word.find({"is_learned": True}).to_list()
-    # words = await ws()
+    await Word.insert_many(words)
 
     words = await get_words(is_learned=False)
     assert len(words) == 1
@@ -66,6 +63,13 @@ async def init():
         language=Language.spanish,
         part_of_speech=PartOfSpeech.adjective,
     )
+    assert (
+        word.value == "gordo"
+        and word.meaning == "fat"
+        and word.is_learned == False
+        and word.part_of_speech == PartOfSpeech.adjective
+    )
+    word = await get_word(word.id)
     assert (
         word.value == "gordo"
         and word.meaning == "fat"

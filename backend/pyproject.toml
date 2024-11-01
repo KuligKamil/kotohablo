@@ -12,8 +12,9 @@ dependencies = [
     "beanie==1.26.0",
     "faker==27.0.0",
     "pytest-asyncio==0.23.8",
-    "fastapi==0.115.4",
+    "fastapi[standard]==0.115.4",
     "mypy==1.13.0",
+    "pydantic-settings==2.6.0",
 ]
 requires-python = "==3.11.*"
 readme = "README.md"

@@ -36,7 +36,7 @@ class PartOfSpeech(SuperEnum):
     interjection = "interjection"  # wykrzyknik
 
 
-class Word(Document, Date, Active ):
+class Word(Document, Date, Active):
     value: str
     meaning: str
     is_learned: bool
